@@ -1,0 +1,246 @@
+// Premium Advisory Services Data
+export interface PremiumService {
+  id: string;
+  title: string;
+  tagline: string;
+  description: string;
+  fullDescription: string;
+  category: string;
+  icon: string;
+  highlights: string[];
+  idealFor: string[];
+}
+
+export const premiumServices: PremiumService[] = [
+  {
+    id: "celestial-strategy",
+    title: "The Celestial Strategy™",
+    tagline: "Long-term strategic guidance for leaders",
+    description: "Comprehensive astrological counsel designed for CXOs, industrialists, and public figures seeking to align their trajectory with cosmic intelligence.",
+    fullDescription: "The Celestial Strategy™ offers a sophisticated, long-term astrological framework for visionary leaders. This bespoke service provides strategic guidance that integrates Vedic wisdom with contemporary leadership challenges, enabling you to navigate complexity with cosmic insight. Our methodology examines planetary cycles over extended periods, identifying optimal phases for expansion, consolidation, and transformation. Through meticulous analysis of your unique astrological chart, we craft personalised strategies that enhance decision-making, mitigate risks, and amplify opportunities across all dimensions of your professional and personal life.",
+    category: "Strategic Advisory",
+    icon: "Crown",
+    highlights: [
+      "Multi-year planetary cycle analysis",
+      "Strategic decision support for major initiatives",
+      "Risk assessment and mitigation frameworks",
+      "Personalised leadership enhancement protocols",
+    ],
+    idealFor: [
+      "Chief Executive Officers and C-suite executives",
+      "Industrialists and business magnates",
+      "Public figures and influencers",
+      "High-net-worth individuals managing complex portfolios",
+    ],
+  },
+  {
+    id: "destiny-architecture",
+    title: "The Destiny Architecture™",
+    tagline: "Structuring life with planetary cycles",
+    description: "A comprehensive framework for harmonising personal and professional dimensions through precise alignment with planetary rhythms and cosmic timing.",
+    fullDescription: "The Destiny Architecture™ transforms how you structure your life's most critical components. This innovative service synthesises ancient Vedic principles with modern life design, creating a personalised blueprint that synchronises your activities, relationships, and aspirations with optimal planetary influences. We analyse your complete astrological profile to identify natural rhythms, peak performance periods, and transformative opportunities. The result is a structured approach to life planning that enhances productivity, deepens fulfilment, and ensures that your personal and professional endeavours resonate with your inherent cosmic design.",
+    category: "Life Architecture",
+    icon: "Building2",
+    highlights: [
+      "Complete life blueprint design",
+      "Personal and professional synchronisation",
+      "Optimal timing identification",
+      "Long-term life structure planning",
+    ],
+    idealFor: [
+      "Executives balancing multiple priorities",
+      "Entrepreneurs building businesses",
+      "Professionals seeking life optimisation",
+      "Individuals pursuing significant transformations",
+    ],
+  },
+  {
+    id: "maharaja-protocol",
+    title: "The Maharaja Protocol™",
+    tagline: "Generational legacy and succession planning",
+    description: "Sophisticated astrological guidance for preserving and extending family legacies through strategic succession planning and generational wealth transfer.",
+    fullDescription: "The Maharaja Protocol™ addresses the profound responsibility of legacy stewardship. This exclusive service provides astrological frameworks for managing generational wealth, planning succession, and ensuring family harmony across multiple generations. We examine not only your natal chart but also those of key family members, identifying optimal timing for transitions, wealth transfer, and leadership handovers. Our approach considers family dynamics, business continuity, and the preservation of values and traditions. Through careful analysis of planetary cycles affecting your family lineage, we help craft succession strategies that honour the past while securing the future.",
+    category: "Legacy Planning",
+    icon: "Users",
+    highlights: [
+      "Multi-generational chart analysis",
+      "Succession timing optimisation",
+      "Family harmony and dynamics assessment",
+      "Legacy preservation strategies",
+    ],
+    idealFor: [
+      "Family business owners",
+      "Multi-generational wealth holders",
+      "Patriarchs and matriarchs planning succession",
+      "Individuals managing family estates and trusts",
+    ],
+  },
+  {
+    id: "cosmic-capital",
+    title: "Cosmic Capital Advisory™",
+    tagline: "Precision timing for wealth and business decisions",
+    description: "High-precision astrological timing services for critical financial and business decisions, optimising outcomes through strategic date selection.",
+    fullDescription: "Cosmic Capital Advisory™ represents the pinnacle of financial astrology, offering precise timing guidance for wealth creation, preservation, and strategic deployment. This service combines deep astrological expertise with understanding of financial markets, business cycles, and investment psychology. We identify auspicious periods for major transactions, investment launches, business expansions, and capital allocation decisions. Through meticulous analysis of transiting planets and their aspects to your natal chart, we provide specific date recommendations that enhance the probability of favourable outcomes. Whether you're launching a new venture, making significant investments, or restructuring assets, our timing intelligence adds a critical dimension to your decision-making process.",
+    category: "Financial Advisory",
+    icon: "TrendingUp",
+    highlights: [
+      "Precise date selection for major transactions",
+      "Investment timing optimisation",
+      "Business launch and expansion guidance",
+      "Capital deployment strategies",
+    ],
+    idealFor: [
+      "High-net-worth investors",
+      "Private equity and venture capital professionals",
+      "Business owners making strategic investments",
+      "Financial executives managing significant portfolios",
+    ],
+  },
+  {
+    id: "boardroom-muhurta",
+    title: "The Boardroom Muhurta™",
+    tagline: "Timing validation for critical corporate decisions",
+    description: "Astrological validation and timing optimisation for board meetings, major announcements, mergers, acquisitions, and other critical corporate events.",
+    fullDescription: "The Boardroom Muhurta™ brings ancient Vedic timing principles to the corporate world's most significant moments. This service provides astrological validation and date optimisation for board meetings, annual general meetings, product launches, mergers and acquisitions, IPO filings, and other mission-critical corporate events. We analyse the astrological charts of key decision-makers, the corporate entity itself (incorporation chart), and optimal timing windows to ensure maximum alignment between corporate actions and cosmic influences. Our detailed reports provide specific date recommendations, explain the astrological rationale, and highlight potential challenges or opportunities associated with proposed timelines. This service transforms how corporations approach timing, adding a sophisticated dimension to strategic planning.",
+    category: "Corporate Timing",
+    icon: "Calendar",
+    highlights: [
+      "Board meeting and AGM timing",
+      "M&A transaction optimisation",
+      "IPO and fundraising date selection",
+      "Major announcement timing validation",
+    ],
+    idealFor: [
+      "Corporate boards and executives",
+      "Public company leadership",
+      "Private equity firms",
+      "Organisations planning major strategic moves",
+    ],
+  },
+  {
+    id: "legacy-continuum",
+    title: "The Legacy Continuum™",
+    tagline: "Securing next-generation stability and growth",
+    description: "Comprehensive astrological guidance for ensuring smooth transitions, educational planning, and optimal development paths for the next generation.",
+    fullDescription: "The Legacy Continuum™ focuses on the future, providing astrological insights for nurturing and guiding the next generation. This service helps parents, guardians, and family leaders make informed decisions about education, career guidance, marriage timing, and life transitions for their children and heirs. We analyse children's natal charts to identify natural talents, optimal learning periods, career inclinations, and timing for major life decisions. Additionally, we examine family charts to understand generational patterns and ensure smooth transitions. Our guidance covers everything from educational planning and university selection to career initiation, marriage timing, and the transfer of responsibilities. This service ensures that the next generation is positioned for success while maintaining family values and traditions.",
+    category: "Next Generation",
+    icon: "Shield",
+    highlights: [
+      "Children's chart analysis and guidance",
+      "Educational and career planning",
+      "Marriage and partnership timing",
+      "Generation transition support",
+    ],
+    idealFor: [
+      "Parents planning for children's futures",
+      "Family leaders managing generational transitions",
+      "Guardians and trustees",
+      "Individuals with significant inheritance planning needs",
+    ],
+  },
+  {
+    id: "union-intelligence",
+    title: "Union Intelligence™",
+    tagline: "Compatibility and alliance advisory for elite marriages and partnerships",
+    description: "Sophisticated compatibility analysis for marriages, business partnerships, and strategic alliances, ensuring optimal harmony and success potential.",
+    fullDescription: "Union Intelligence™ provides comprehensive astrological compatibility analysis for the most important relationships in your life. Whether evaluating a potential marriage partner, business co-founder, or strategic alliance, this service offers deep insights into compatibility, timing, and potential outcomes. We conduct detailed chart comparisons, examining planetary placements, aspects, and synastry patterns between charts. Our analysis identifies areas of natural harmony, potential challenges, and optimal timing for formalising relationships. For marriages, we provide compatibility scores across multiple dimensions, timing recommendations for engagement and wedding dates, and guidance for navigating potential relationship challenges. For business partnerships, we assess working dynamics, complementary strengths, and timing for partnership formation. This service ensures that your most significant alliances are built on astrologically sound foundations.",
+    category: "Compatibility Analysis",
+    icon: "Heart",
+    highlights: [
+      "Comprehensive compatibility analysis",
+      "Marriage timing and date selection",
+      "Business partnership assessment",
+      "Relationship harmony optimisation",
+    ],
+    idealFor: [
+      "Couples considering marriage",
+      "Business partners evaluating alliances",
+      "Families arranging strategic marriages",
+      "Executives forming key partnerships",
+    ],
+  },
+  {
+    id: "spatial-sovereignty",
+    title: "The Spatial Sovereignty™",
+    tagline: "Vastu guidance for power, control, and influence",
+    description: "Advanced Vastu Shastra consultation for homes, offices, and commercial properties, optimising spatial energy for success and influence.",
+    fullDescription: "The Spatial Sovereignty™ applies ancient Vastu Shastra principles to modern properties, creating environments that enhance power, productivity, and prosperity. This comprehensive service includes detailed analysis of your property's energy flow, recommendations for optimal layouts, placement of key elements, and remedies for identified challenges. We assess everything from room positioning and furniture arrangement to colour schemes, materials, and directional alignments. Our analysis considers both the property's inherent characteristics and the astrological charts of its occupants, ensuring maximum harmony and benefit. Whether consulting on a new property purchase, office design, or remedying existing spaces, we provide actionable guidance that transforms how you interact with your environment. This service is particularly valuable for properties where major decisions are made, business is conducted, or legacy is built.",
+    category: "Vastu Consultation",
+    icon: "Home",
+    highlights: [
+      "Complete property energy analysis",
+      "Layout and design optimisation",
+      "Remedial measures and enhancements",
+      "Directional and placement guidance",
+    ],
+    idealFor: [
+      "Property buyers and developers",
+      "Business owners designing offices",
+      "Executives managing workspaces",
+      "Homeowners seeking harmony and prosperity",
+    ],
+  },
+  {
+    id: "energetic-optimization",
+    title: "The Energetic Optimisation™",
+    tagline: "Precision remedies for high performers",
+    description: "Personalised astrological remedies and enhancements designed to optimise energy, performance, and outcomes for ambitious individuals.",
+    fullDescription: "The Energetic Optimisation™ focuses on fine-tuning your astrological energies through precise remedies and enhancements. This service identifies specific planetary challenges or imbalances in your chart and provides targeted solutions that restore harmony and amplify positive influences. Our remedies include gemstone recommendations, mantra prescriptions, yantra placements, ritual timings, and lifestyle adjustments aligned with your astrological profile. We don't offer generic solutions; every recommendation is precisely calculated based on your unique chart, current planetary transits, and specific objectives. Whether you're seeking enhanced performance, improved health, better relationships, or protection from malefic influences, we provide personalised remedy protocols that integrate seamlessly into your life. This service is particularly valuable during challenging planetary periods or when pursuing specific goals requiring energetic support.",
+    category: "Remedial Services",
+    icon: "Zap",
+    highlights: [
+      "Personalised gemstone recommendations",
+      "Mantra and ritual prescriptions",
+      "Lifestyle and timing adjustments",
+      "Protection and enhancement protocols",
+    ],
+    idealFor: [
+      "High performers seeking optimisation",
+      "Individuals facing specific challenges",
+      "Those pursuing ambitious goals",
+      "People experiencing difficult planetary periods",
+    ],
+  },
+  {
+    id: "black-swan-protocol",
+    title: "The Black Swan Protocol™",
+    tagline: "Crisis timing and emergency advisory",
+    description: "Rapid-response astrological consultation for navigating crises, emergencies, and unexpected challenges with strategic timing and remedial support.",
+    fullDescription: "The Black Swan Protocol™ provides immediate astrological guidance when unexpected crises arise. This premium emergency service offers rapid analysis of challenging situations, identification of underlying astrological factors, and immediate recommendations for navigating difficulties. Whether facing business crises, health emergencies, legal challenges, or unexpected setbacks, we provide timely insights that help you understand the cosmic context and make optimal decisions under pressure. Our analysis includes examination of current planetary transits, identification of challenging aspects, and provision of immediate remedial measures. We also provide timing guidance for critical decisions during crisis periods, helping you choose moments that minimise negative impacts and maximise recovery potential. This service combines urgent consultation availability with deep astrological expertise, ensuring you have cosmic intelligence when you need it most.",
+    category: "Crisis Management",
+    icon: "AlertTriangle",
+    highlights: [
+      "Rapid crisis analysis and guidance",
+      "Emergency timing recommendations",
+      "Immediate remedial measures",
+      "24/7 consultation availability",
+    ],
+    idealFor: [
+      "Executives managing business crises",
+      "Individuals facing unexpected challenges",
+      "Those requiring urgent astrological guidance",
+      "People navigating critical life situations",
+    ],
+  },
+  {
+    id: "inner-circle-retainer",
+    title: "The Inner Circle Retainer™",
+    tagline: "Ongoing subscription-based strategic consultation",
+    description: "Elite subscription service providing continuous astrological support, monthly consultations, and priority access to all advisory services.",
+    fullDescription: "The Inner Circle Retainer™ represents the most comprehensive and exclusive offering, providing continuous astrological support through a premium subscription model. This service includes monthly private consultations, detailed monthly astrological reports, priority access to all other advisory services, and direct access for urgent questions or guidance needs. As a retainer client, you receive personalised attention to your evolving needs, proactive identification of opportunities and challenges, and seamless integration of astrological intelligence into your decision-making process. We monitor your chart continuously, providing insights before you need them and ensuring optimal timing for all major decisions. This service is designed for individuals who view astrological guidance as an essential component of their strategic toolkit and desire ongoing, relationship-based consultation rather than occasional services. The Inner Circle Retainer™ ensures that cosmic intelligence is always available to support your success.",
+    category: "Ongoing Consultation",
+    icon: "Star",
+    highlights: [
+      "Monthly private consultations",
+      "Detailed monthly astrological reports",
+      "Priority access to all services",
+      "Continuous chart monitoring and guidance",
+    ],
+    idealFor: [
+      "Elite clients seeking comprehensive support",
+      "High-net-worth individuals",
+      "Executives requiring ongoing strategic guidance",
+      "Those who value long-term astrological partnership",
+    ],
+  },
+];

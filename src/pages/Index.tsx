@@ -12,7 +12,7 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Planet Nakshatra | Premium Vedic Astrology by Astrologer Sameer</title>
+        <title>Planets Nakshatra - Sameer</title>
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="shortcut icon" type="image/png" href="/favicon.png" />
         <meta 

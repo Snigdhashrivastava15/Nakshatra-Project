@@ -1,16 +1,24 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 
 @Injectable()
 export class ServicesService {
+  private readonly logger = new Logger(ServicesService.name);
+
   constructor(private prisma: PrismaService) {}
 
   async findAll() {
-    return this.prisma.service.findMany({
-      where: { active: true },
-      orderBy: { createdAt: 'asc' },
-    });
+    try {
+      const services = await this.prisma.service.findMany({
+        where: { active: true },
+        orderBy: { createdAt: 'asc' },
+      });
+      return services || [];
+    } catch (error) {
+      this.logger.error('Error in findAll:', error);
+      throw error;
+    }
   }
 
   async findOne(id: string) {
