@@ -54,8 +54,8 @@ const Header = () => {
               transition={{ duration: 0.3 }}
             />
             <div className="hidden sm:block">
-              <span className="font-display text-xl text-foreground tracking-wide">Planet Nakshatra</span>
-              <div className="text-xs text-muted-foreground tracking-[0.2em] uppercase">By Sameer</div>
+              <span className="font-display text-xl text-foreground tracking-wide">Planets Nakshatra</span>
+              <div className="text-xs text-muted-foreground tracking-[0.2em] uppercase"> - Sameer</div>
             </div>
           </motion.a>
 

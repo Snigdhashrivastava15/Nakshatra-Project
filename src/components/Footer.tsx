@@ -15,8 +15,8 @@ const Footer = () => {
                 className="h-16 w-auto object-contain hover:scale-105 transition-transform duration-300" 
               />
               <div>
-                <span className="font-display text-xl text-background">Planet Nakshatra</span>
-                <div className="text-xs text-background/50 tracking-[0.2em] uppercase">By Sameer</div>
+                <span className="font-display text-xl text-background">Planets Nakshatra</span>
+                <div className="text-xs text-background/50 tracking-[0.2em] uppercase"> - Sameer</div>
               </div>
             </div>
             <p className="font-body text-background/60 leading-relaxed max-w-md">Exclusive astrological counsel for those who shape industries, steward legacies, and make decisions of consequence.</p>
@@ -39,7 +39,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t border-background/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-body text-xs text-background/40">© {currentYear} Planet Nakshatra. All rights reserved.</p>
+          <p className="font-body text-xs text-background/40">© {currentYear} Planets Nakshatra. All rights reserved.</p>
           <div className="flex gap-8">
             <a href="#" className="font-body text-xs text-background/40 hover:text-secondary transition-colors">Privacy Policy</a>
             <a href="#" className="font-body text-xs text-background/40 hover:text-secondary transition-colors">Terms of Service</a>

@@ -6,12 +6,14 @@ import { ServicesModule } from './services/services.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { ContactModule } from './contact/contact.module';
 import { GoogleCalendarModule } from './google-calendar/google-calendar.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
+      cache: true,
     }),
     ScheduleModule.forRoot(),
     PrismaModule,
@@ -19,6 +21,8 @@ import { GoogleCalendarModule } from './google-calendar/google-calendar.module';
     BookingsModule,
     ContactModule,
     GoogleCalendarModule,
+    HealthModule,
   ],
 })
 export class AppModule {}
+
