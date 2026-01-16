@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  bookings       Booking[]
+  contactInquiries ContactInquiry[]
+  
+  @@map("users")
+}
+
+model Service {
+  id               String   @id @default(uuid())
+  title            String
+  description      String   // Short description for cards
+  shortDescription String   @default("") // Same as description, for compatibility
+  fullDescription  String   @default("") // Full detailed description for modal
+  category         String
+  iconName         String?  // Store icon name from lucide-react
+  duration         Int      @default(60) // Duration in minutes
+  price            Float?
+  active           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  bookings    Booking[]
+  
+  @@map("services")
+}
+
+model Booking {
+  id            String   @id @default(uuid())
+  userId        String?
+  userEmail     String
+  userName      String
+  userPhone     String?
+  serviceId     String
+  service       Service  @relation(fields: [serviceId], references: [id])
+  bookingDate   DateTime
+  bookingTime   String   // Store time as string (e.g., "14:00")
+  status        BookingStatus @default(PENDING)
+  googleEventId String?  @unique // Google Calendar event ID
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  user          User?    @relation(fields: [userId], references: [id])
+  
+  @@index([bookingDate])
+  @@index([serviceId])
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model ContactInquiry {
+  id        String   @id @default(uuid())
+  userId    String?
+  name      String
+  email     String
+  phone     String?
+  message   String
+  status    InquiryStatus @default(NEW)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  user      User?    @relation(fields: [userId], references: [id])
+  
+  @@map("contact_inquiries")
+}
+
+enum InquiryStatus {
+  NEW
+  IN_PROGRESS
+  RESPONDED
+  ARCHIVED
+}

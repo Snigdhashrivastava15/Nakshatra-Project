@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm Cream & Burgundy Theme */
+    --background: 40 30% 97%;
+    --foreground: 15 25% 15%;
+
+    --card: 40 25% 95%;
+    --card-foreground: 15 25% 15%;
+
+    --popover: 40 30% 97%;
+    --popover-foreground: 15 25% 15%;
+
+    /* Rich Burgundy Primary */
+    --primary: 350 45% 30%;
+    --primary-foreground: 40 30% 97%;
+
+    /* Warm Gold Secondary */
+    --secondary: 38 70% 50%;
+    --secondary-foreground: 15 25% 15%;
+
+    --muted: 35 20% 90%;
+    --muted-foreground: 15 15% 40%;
+
+    /* Antique Gold Accent */
+    --accent: 42 80% 55%;
+    --accent-foreground: 15 25% 15%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 35 25% 85%;
+    --input: 35 25% 85%;
+    --ring: 350 45% 30%;
+
+    --radius: 0.25rem;
+
+    /* Custom Theme Colors */
+    --burgundy: 350 45% 30%;
+    --burgundy-light: 350 35% 45%;
+    --gold: 42 80% 55%;
+    --gold-dark: 38 70% 45%;
+    --cream: 40 30% 97%;
+    --cream-dark: 35 25% 90%;
+    --espresso: 15 25% 15%;
+
+    /* Sidebar */
+    --sidebar-background: 40 30% 97%;
+    --sidebar-foreground: 15 25% 15%;
+    --sidebar-primary: 350 45% 30%;
+    --sidebar-primary-foreground: 40 30% 97%;
+    --sidebar-accent: 35 25% 90%;
+    --sidebar-accent-foreground: 15 25% 15%;
+    --sidebar-border: 35 25% 85%;
+    --sidebar-ring: 350 45% 30%;
+  }
+
+  .dark {
+    /* Dark mode - Deep Espresso & Gold */
+    --background: 20 20% 8%;
+    --foreground: 40 25% 92%;
+
+    --card: 20 18% 12%;
+    --card-foreground: 40 25% 92%;
+
+    --popover: 20 20% 8%;
+    --popover-foreground: 40 25% 92%;
+
+    --primary: 42 80% 55%;
+    --primary-foreground: 20 20% 8%;
+
+    --secondary: 350 35% 40%;
+    --secondary-foreground: 40 25% 92%;
+
+    --muted: 20 15% 18%;
+    --muted-foreground: 35 15% 60%;
+
+    --accent: 38 70% 50%;
+    --accent-foreground: 20 20% 8%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 20 15% 20%;
+    --input: 20 15% 20%;
+    --ring: 42 80% 55%;
+
+    /* Dark Theme Colors */
+    --burgundy: 350 35% 40%;
+    --burgundy-light: 350 30% 50%;
+    --gold: 42 80% 55%;
+    --gold-dark: 38 70% 45%;
+    --cream: 40 25% 92%;
+    --cream-dark: 35 20% 80%;
+    --espresso: 20 20% 8%;
+
+    /* Sidebar Dark */
+    --sidebar-background: 20 18% 12%;
+    --sidebar-foreground: 40 25% 92%;
+    --sidebar-primary: 42 80% 55%;
+    --sidebar-primary-foreground: 20 20% 8%;
+    --sidebar-accent: 20 15% 18%;
+    --sidebar-accent-foreground: 40 25% 92%;
+    --sidebar-border: 20 15% 20%;
+    --sidebar-ring: 42 80% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Raleway', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Libre Baskerville', serif;
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: 'Libre Baskerville', serif;
+  }
+
+  .font-body {
+    font-family: 'Raleway', sans-serif;
+  }
+
+  /* Art Deco Decorative Line */
+  .deco-line {
+    @apply relative;
+  }
+
+  .deco-line::after {
+    content: '';
+    @apply absolute left-1/2 -translate-x-1/2 w-24 h-px bg-gradient-to-r from-transparent via-secondary to-transparent;
+    bottom: -1rem;
+  }
+
+  /* Elegant Card Style */
+  .card-elegant {
+    @apply bg-card border border-border/50 shadow-sm transition-all duration-500;
+    @apply hover:shadow-lg hover:border-secondary/30;
+  }
+
+  /* Gold Gradient Text */
+  .text-gold-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-secondary via-accent to-secondary;
+  }
+
+  /* Burgundy Gradient Text */
+  .text-burgundy-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary to-primary;
+  }
+
+  /* Decorative Border */
+  .border-ornate {
+    @apply border-2 border-secondary/30;
+    border-image: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--accent)), hsl(var(--secondary))) 1;
+  }
+
+  /* Subtle Pattern Overlay */
+  .pattern-overlay {
+    background-image: 
+      radial-gradient(circle at 25% 25%, hsl(var(--secondary) / 0.03) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, hsl(var(--secondary) / 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Warm Glow Effect */
+  .glow-warm {
+    box-shadow: 0 0 40px hsl(var(--secondary) / 0.15);
+  }
+
+  /* Geometric Frame */
+  .frame-geometric {
+    @apply relative;
+  }
+
+  .frame-geometric::before {
+    content: '';
+    @apply absolute inset-0 border border-secondary/20 pointer-events-none;
+    transform: translate(8px, 8px);
+  }
+}
+
+@layer utilities {
+  /* Smooth Reveal Animation */
+  .animate-reveal {
+    animation: reveal 0.8s ease-out forwards;
+  }
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Elegant Fade */
+  .animate-fade-elegant {
+    animation: fadeElegant 1s ease-out forwards;
+  }
+
+  @keyframes fadeElegant {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Decorative Spin */
+  .animate-spin-slow {
+    animation: spin 20s linear infinite;
+  }
+
+  /* Line Draw Animation */
+  .animate-line-draw {
+    animation: lineDraw 1.5s ease-out forwards;
+  }
+
+  @keyframes lineDraw {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  /* Stagger Delays */
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
