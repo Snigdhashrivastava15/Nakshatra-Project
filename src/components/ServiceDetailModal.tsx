@@ -20,16 +20,16 @@ const ServiceDetailModal = ({ service, open, onOpenChange }: ServiceDetailModalP
 
   const handleBookService = () => {
     onOpenChange(false);
-    // Scroll to booking section
-    const bookingSection = document.getElementById("booking");
-    if (bookingSection) {
-      bookingSection.scrollIntoView({ behavior: "smooth" });
-      // Small delay to ensure scroll completes, then trigger service selection
-      setTimeout(() => {
-        const event = new CustomEvent("selectService", { detail: { serviceId: service.id } });
-        window.dispatchEvent(event);
-      }, 500);
-    }
+    // Open consultation selection modal with this service pre-selected
+    setTimeout(() => {
+      const event = new CustomEvent("openConsultationModal", { detail: { preselectedServiceId: service.id } });
+      window.dispatchEvent(event);
+      // Scroll to booking section so modal is visible
+      const bookingSection = document.getElementById("booking");
+      if (bookingSection) {
+        bookingSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 300);
   };
 
   const handleEnquire = () => {

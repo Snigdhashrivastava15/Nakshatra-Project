@@ -1,14 +1,18 @@
-import { Injectable, BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, ConflictException, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { GoogleCalendarService } from '../google-calendar/google-calendar.service';
+import { EmailService } from '../email/email.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { addMinutes, isBefore, startOfDay, format } from 'date-fns';
 
 @Injectable()
 export class BookingsService {
+  private readonly logger = new Logger(BookingsService.name);
+
   constructor(
     private prisma: PrismaService,
     private googleCalendar: GoogleCalendarService,
+    private emailService: EmailService,
   ) {}
 
   async create(createBookingDto: CreateBookingDto) {
@@ -115,15 +119,30 @@ export class BookingsService {
         },
       });
 
+      // Send email notifications (async, don't wait)
+      this.sendEmailNotifications(updatedBooking).catch((error) => {
+        this.logger.error('Failed to send email notifications:', error);
+      });
+
       return updatedBooking;
     } catch (error) {
       // If Google Calendar fails, booking is still created but marked as PENDING
-      this.prisma.booking.update({
+      this.logger.warn('Google Calendar event creation failed:', error);
+      const updatedBooking = await this.prisma.booking.update({
         where: { id: booking.id },
         data: { status: 'PENDING' },
+        include: {
+          service: true,
+          user: true,
+        },
       });
 
-      return booking;
+      // Send email notifications even if Google Calendar fails
+      this.sendEmailNotifications(updatedBooking).catch((error) => {
+        this.logger.error('Failed to send email notifications:', error);
+      });
+
+      return updatedBooking;
     }
   }
 
@@ -211,5 +230,48 @@ export class BookingsService {
     }
 
     return booking;
+  }
+
+  /**
+   * Send email notifications for a booking
+   * - Confirmation email to client
+   * - Notification email to admin
+   */
+  private async sendEmailNotifications(booking: any): Promise<void> {
+    try {
+      // Send confirmation email to client
+      await this.emailService.sendBookingConfirmation({
+        userName: booking.userName,
+        userEmail: booking.userEmail,
+        service: {
+          title: booking.service.title,
+          duration: booking.service.duration,
+          price: booking.service.price,
+        },
+        bookingDate: booking.bookingDate,
+        bookingTime: booking.bookingTime,
+        notes: booking.notes,
+      });
+
+      // Send notification email to admin
+      await this.emailService.sendAdminNotification({
+        userName: booking.userName,
+        userEmail: booking.userEmail,
+        userPhone: booking.userPhone,
+        service: {
+          title: booking.service.title,
+          duration: booking.service.duration,
+          price: booking.service.price,
+        },
+        bookingDate: booking.bookingDate,
+        bookingTime: booking.bookingTime,
+        notes: booking.notes,
+      });
+
+      this.logger.log(`Email notifications sent for booking ${booking.id}`);
+    } catch (error) {
+      this.logger.error(`Failed to send email notifications for booking ${booking.id}:`, error);
+      // Don't throw - email failures shouldn't break the booking
+    }
   }
 }

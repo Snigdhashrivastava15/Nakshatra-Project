@@ -70,12 +70,26 @@ export class GoogleCalendarService {
             displayName: eventData.attendeeName,
           },
         ];
-        event.sendUpdates = 'all';
+      }
+
+      // Add Google Meet link if configured
+      const enableMeet = this.configService.get<string>('GOOGLE_MEET_ENABLED') === 'true';
+      if (enableMeet) {
+        event.conferenceData = {
+          createRequest: {
+            requestId: `meet-${Date.now()}`,
+            conferenceSolutionKey: {
+              type: 'hangoutsMeet',
+            },
+          },
+        };
       }
 
       const response = await this.calendar.events.insert({
         calendarId: this.calendarId,
         requestBody: event,
+        sendUpdates: eventData.attendeeEmail ? 'all' : undefined,
+        conferenceDataVersion: enableMeet ? 1 : 0,
       });
 
       this.logger.log(`Event created: ${response.data.id}`);

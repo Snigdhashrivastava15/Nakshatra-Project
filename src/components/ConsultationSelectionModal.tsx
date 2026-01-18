@@ -7,33 +7,40 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Service } from "@/lib/api";
 import { apiClient } from "@/lib/api";
-import { Check, Loader2 } from "lucide-react";
+import { Loader2, RefreshCw } from "lucide-react";
 
 interface ConsultationSelectionModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onContinue: (serviceId: string) => void;
+  preselectedServiceId?: string;
 }
 
 const ConsultationSelectionModal = ({
   open,
   onOpenChange,
   onContinue,
+  preselectedServiceId,
 }: ConsultationSelectionModalProps) => {
   const [services, setServices] = useState<Service[]>([]);
   const [selectedServiceId, setSelectedServiceId] = useState<string>("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadServices = async () => {
       try {
         setLoading(true);
+        setError(null);
         const data = await apiClient.getServices();
-        setServices(data);
-      } catch (error) {
-        console.error("Failed to load services:", error);
+        setServices(data || []);
+      } catch (error: any) {
+        const errorMessage = error?.message || "Unable to connect to server. Please check if the backend is running.";
+        setError(errorMessage);
+        setServices([]);
       } finally {
         setLoading(false);
       }
@@ -41,72 +48,27 @@ const ConsultationSelectionModal = ({
 
     if (open) {
       loadServices();
-      setSelectedServiceId(""); // Reset selection when modal opens
-    }
-  }, [open]);
-
-  // Map consultation types to actual services
-  const getConsultationOptions = () => {
-    // Find best matching service for each consultation type
-    const findBestService = (predicates: ((s: Service) => boolean)[]): Service | null => {
-      for (const predicate of predicates) {
-        const service = services.find(predicate);
-        if (service) return service;
+      // If preselectedServiceId is provided, use it; otherwise reset selection
+      if (preselectedServiceId) {
+        setSelectedServiceId(preselectedServiceId);
+      } else {
+        setSelectedServiceId("");
       }
-      return null;
-    };
+    }
+  }, [open, preselectedServiceId]);
 
-    const options = [
-      {
-        id: "one-on-one",
-        label: "One-on-One Vedic Consultation (60 mins)",
-        service: findBestService([
-          (s) => s.title.includes("Destiny Architecture"),
-          (s) => s.category === "Personal" && s.duration === 60,
-          (s) => s.duration === 60 && !s.title.includes("Retainer"),
-        ]),
-      },
-      {
-        id: "career-business",
-        label: "Career & Business Guidance",
-        service: findBestService([
-          (s) => s.title.includes("Celestial Strategy"),
-          (s) => s.title.includes("Boardroom Muhurta"),
-          (s) => s.title.includes("Cosmic Capital"),
-          (s) => s.category === "Executive",
-          (s) => s.category === "Corporate",
-        ]),
-      },
-      {
-        id: "marriage-relationship",
-        label: "Marriage & Relationship Analysis",
-        service: findBestService([
-          (s) => s.title.includes("Union Intelligence"),
-          (s) => s.category === "Relationships",
-        ]),
-      },
-      {
-        id: "long-term",
-        label: "Long-Term Celestial Strategy",
-        service: findBestService([
-          (s) => s.title.includes("Celestial Strategy"),
-          (s) => s.title.includes("Inner Circle Retainer"),
-          (s) => s.title.includes("Maharaja Protocol"),
-          (s) => s.category === "Legacy",
-        ]),
-      },
-      {
-        id: "custom",
-        label: "Custom Consultation",
-        service: services[0] || null, // Use first available service
-      },
-    ];
+  // Display all available services directly
+  const availableServices = services.filter((s) => s.active);
 
-    // Return only options that have a matching service
-    return options.filter((opt) => opt.service !== null);
-  };
-
-  const consultationOptions = getConsultationOptions();
+  // Auto-select preselected service when services load
+  useEffect(() => {
+    if (preselectedServiceId && services.length > 0 && !selectedServiceId) {
+      const service = services.find((s) => s.id === preselectedServiceId && s.active);
+      if (service) {
+        setSelectedServiceId(preselectedServiceId);
+      }
+    }
+  }, [services, preselectedServiceId, selectedServiceId]);
 
   const handleContinue = () => {
     if (selectedServiceId) {
@@ -127,57 +89,122 @@ const ConsultationSelectionModal = ({
             Select Your Consultation Type
           </DialogTitle>
           <DialogDescription className="font-body text-foreground/70 pt-2">
-            Choose the consultation type that best fits your needs. You can change this later.
+            Choose the consultation type that best fits your needs. Only one consultation can be selected at a time.
           </DialogDescription>
         </DialogHeader>
 
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-secondary" />
+            <span className="ml-3 font-body text-foreground/70">Loading services...</span>
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <p className="font-body text-foreground/70 mb-2">
+              {error}
+            </p>
+            <p className="font-body text-sm text-foreground/50 mb-4">
+              Make sure the backend server is running on {apiClient.baseUrl}
+            </p>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setError(null);
+                setLoading(true);
+                apiClient.getServices()
+                  .then((data) => {
+                    setServices(data || []);
+                  })
+                  .catch((error: any) => {
+                    setError(error?.message || "Failed to load services. Please try again.");
+                  })
+                  .finally(() => {
+                    setLoading(false);
+                  });
+              }}
+              className="font-body tracking-wide uppercase group"
+            >
+              <RefreshCw className="mr-2 h-4 w-4 group-hover:rotate-180 transition-transform" />
+              Retry
+            </Button>
+          </div>
+        ) : availableServices.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <p className="font-body text-foreground/70 mb-4">
+              No services are currently available. Please check the database or contact support.
+            </p>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setError(null);
+                setLoading(true);
+                apiClient.getServices()
+                  .then((data) => {
+                    setServices(data || []);
+                  })
+                  .catch((error: any) => {
+                    setError(error?.message || "Failed to load services. Please try again.");
+                  })
+                  .finally(() => {
+                    setLoading(false);
+                  });
+              }}
+              className="font-body tracking-wide uppercase group"
+            >
+              <RefreshCw className="mr-2 h-4 w-4 group-hover:rotate-180 transition-transform" />
+              Retry
+            </Button>
           </div>
         ) : (
-          <div className="space-y-4 py-4">
-            {consultationOptions.map((option) => {
-              const service = option.service;
-              if (!service) return null;
-
+          <div className="space-y-3 py-4">
+            {availableServices.map((service) => {
               const isSelected = selectedServiceId === service.id;
+              const labelText = `${service.title} (${service.duration} mins)`;
 
               return (
-                <button
-                  key={option.id}
-                  onClick={() => handleSelect(service.id)}
-                  className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
+                <label
+                  key={service.id}
+                  htmlFor={`consultation-${service.id}`}
+                  className={`flex items-start gap-4 p-4 rounded-lg border-2 cursor-pointer transition-all ${
                     isSelected
                       ? "border-secondary bg-secondary/10"
                       : "border-border hover:border-secondary/50 bg-background"
                   }`}
                 >
-                  <div className="flex items-start gap-3">
-                    <div
-                      className={`mt-1 w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 ${
-                        isSelected
-                          ? "border-secondary bg-secondary"
-                          : "border-border"
-                      }`}
-                    >
-                      {isSelected && (
-                        <Check className="w-3 h-3 text-secondary-foreground" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-display text-lg text-foreground mb-1">
-                        {option.label}
-                      </h3>
-                      <p className="font-body text-sm text-foreground/60">
-                        {service.description}
-                      </p>
-                      <span className="inline-block mt-2 text-xs font-body text-secondary">
-                        Duration: {service.duration} minutes
-                      </span>
-                    </div>
+                  <div className="mt-1 flex-shrink-0">
+                    <Checkbox
+                      id={`consultation-${service.id}`}
+                      checked={isSelected}
+                      onCheckedChange={(checked) => {
+                        // Single-select behavior: uncheck all others when one is checked
+                        if (checked) {
+                          handleSelect(service.id);
+                        } else {
+                          // Allow unchecking by clicking again
+                          handleSelect("");
+                        }
+                      }}
+                      className="h-5 w-5"
+                    />
                   </div>
-                </button>
+                  <div className="flex-1">
+                    <div className="font-display text-base text-foreground mb-1">
+                      {labelText}
+                    </div>
+                    {service.description || service.shortDescription ? (
+                      <p className="font-body text-sm text-foreground/60 mb-2">
+                        {service.description || service.shortDescription}
+                      </p>
+                    ) : null}
+                    {service.price && (
+                      <div className="flex items-center gap-2 text-xs font-body">
+                        <span className="text-secondary font-medium">
+                          ₹{service.price.toLocaleString("en-IN")}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </label>
               );
             })}
           </div>
@@ -193,8 +220,8 @@ const ConsultationSelectionModal = ({
           </Button>
           <Button
             onClick={handleContinue}
-            disabled={!selectedServiceId || loading}
-            className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-body tracking-wide uppercase"
+            disabled={!selectedServiceId || loading || !!error}
+            className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-body tracking-wide uppercase disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Continue
           </Button>

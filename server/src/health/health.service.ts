@@ -18,13 +18,14 @@ export class HealthService {
         database: 'connected',
         uptime: process.uptime(),
       };
-    } catch (error) {
-      this.logger.error('Health check failed:', error);
+    } catch (error: any) {
+      // Don't log as error - database might not be configured yet
+      this.logger.warn('Database connection check failed:', error.message);
       return {
-        status: 'error',
+        status: 'degraded',
         timestamp: new Date().toISOString(),
         database: 'disconnected',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        message: 'Server is running but database is not available. API endpoints may not work correctly.',
         uptime: process.uptime(),
       };
     }

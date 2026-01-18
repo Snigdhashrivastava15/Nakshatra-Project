@@ -73,13 +73,6 @@ const Header = () => {
                 // Dispatch event to open consultation modal
                 const event = new CustomEvent("openConsultationModal");
                 window.dispatchEvent(event);
-                // Also scroll to booking section
-                setTimeout(() => {
-                  const bookingSection = document.getElementById("booking");
-                  if (bookingSection) {
-                    bookingSection.scrollIntoView({ behavior: "smooth" });
-                  }
-                }, 100);
               }}
             >
               Book Consultation
@@ -108,13 +101,6 @@ const Header = () => {
                   // Dispatch event to open consultation modal
                   const event = new CustomEvent("openConsultationModal");
                   window.dispatchEvent(event);
-                  // Also scroll to booking section
-                  setTimeout(() => {
-                    const bookingSection = document.getElementById("booking");
-                    if (bookingSection) {
-                      bookingSection.scrollIntoView({ behavior: "smooth" });
-                    }
-                  }, 100);
                 }}
               >
                 Book Consultation

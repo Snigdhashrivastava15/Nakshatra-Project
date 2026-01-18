@@ -99,7 +99,7 @@
     --cream-dark: 35 20% 80%;
     --espresso: 20 20% 8%;
 
-    /* Sidebar Dark */
+    /* Dark Sidebar */
     --sidebar-background: 20 18% 12%;
     --sidebar-foreground: 40 25% 92%;
     --sidebar-primary: 42 80% 55%;
@@ -109,45 +109,26 @@
     --sidebar-border: 20 15% 20%;
     --sidebar-ring: 42 80% 55%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
-
   body {
-    @apply bg-background text-foreground;
-    font-family: 'Raleway', sans-serif;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Libre Baskerville', serif;
+    @apply bg-background text-foreground font-body;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
 @layer components {
-  .font-display {
-    font-family: 'Libre Baskerville', serif;
-  }
-
-  .font-body {
-    font-family: 'Raleway', sans-serif;
-  }
-
-  /* Art Deco Decorative Line */
+  /* Decorative Line */
   .deco-line {
     @apply relative;
   }
 
   .deco-line::after {
     content: '';
-    @apply absolute left-1/2 -translate-x-1/2 w-24 h-px bg-gradient-to-r from-transparent via-secondary to-transparent;
-    bottom: -1rem;
+    @apply absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-px bg-gradient-to-r from-transparent via-secondary to-transparent;
   }
 
   /* Elegant Card Style */
@@ -194,6 +175,44 @@
     content: '';
     @apply absolute inset-0 border border-secondary/20 pointer-events-none;
     transform: translate(8px, 8px);
+  }
+
+  /* Blog Content Styling */
+  .prose {
+    @apply text-foreground/80;
+  }
+
+  .prose h2 {
+    @apply font-display text-2xl text-foreground mt-8 mb-4 font-semibold;
+  }
+
+  .prose h3 {
+    @apply font-display text-xl text-foreground mt-6 mb-3 font-semibold;
+  }
+
+  .prose p {
+    @apply mb-6 font-body leading-relaxed;
+  }
+
+  .prose ul,
+  .prose ol {
+    @apply mb-6 font-body;
+  }
+
+  .prose li {
+    @apply mb-2;
+  }
+
+  .prose blockquote {
+    @apply border-l-4 border-secondary pl-6 py-4 my-8 italic font-body text-foreground/80 bg-muted/50 rounded-r;
+  }
+
+  .prose strong {
+    @apply font-semibold text-foreground;
+  }
+
+  .prose a {
+    @apply text-primary hover:text-secondary transition-colors underline;
   }
 }
 

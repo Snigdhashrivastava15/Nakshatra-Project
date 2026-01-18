@@ -7,13 +7,16 @@ import { BookingsModule } from './bookings/bookings.module';
 import { ContactModule } from './contact/contact.module';
 import { GoogleCalendarModule } from './google-calendar/google-calendar.module';
 import { HealthModule } from './health/health.module';
+import { EmailModule } from './email/email.module';
+import { BlogsModule } from './blogs/blogs.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: ['.env', '.env.local'],
       cache: true,
+      expandVariables: true,
     }),
     ScheduleModule.forRoot(),
     PrismaModule,
@@ -22,6 +25,8 @@ import { HealthModule } from './health/health.module';
     ContactModule,
     GoogleCalendarModule,
     HealthModule,
+    EmailModule,
+    BlogsModule,
   ],
 })
 export class AppModule {}

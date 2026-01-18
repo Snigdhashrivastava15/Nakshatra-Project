@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -53,7 +53,7 @@ model Booking {
   service       Service  @relation(fields: [serviceId], references: [id])
   bookingDate   DateTime
   bookingTime   String   // Store time as string (e.g., "14:00")
-  status        BookingStatus @default(PENDING)
+  status        String   @default("PENDING") // PENDING, CONFIRMED, CANCELLED, COMPLETED
   googleEventId String?  @unique // Google Calendar event ID
   notes         String?
   createdAt     DateTime @default(now())
@@ -66,13 +66,6 @@ model Booking {
   @@map("bookings")
 }
 
-enum BookingStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-  COMPLETED
-}
-
 model ContactInquiry {
   id        String   @id @default(uuid())
   userId    String?
@@ -80,18 +73,11 @@ model ContactInquiry {
   email     String
   phone     String?
   message   String
-  status    InquiryStatus @default(NEW)
+  status    String   @default("NEW") // NEW, IN_PROGRESS, RESPONDED, ARCHIVED
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
   user      User?    @relation(fields: [userId], references: [id])
   
   @@map("contact_inquiries")
-}
-
-enum InquiryStatus {
-  NEW
-  IN_PROGRESS
-  RESPONDED
-  ARCHIVED
 }
