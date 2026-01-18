@@ -27,28 +27,8 @@ const BookingSection = () => {
   });
   const { toast } = useToast();
 
-  // Load services
+  // Listen for service selection from consultation modal or other components
   useEffect(() => {
-    const loadServices = async () => {
-      try {
-        setLoading(true);
-        const data = await apiClient.getServices();
-        setServices(data);
-        // Don't auto-select first service - wait for user selection
-      } catch (error) {
-        toast({
-          title: 'Error',
-          description: 'Failed to load services. Please try again.',
-          variant: 'destructive',
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadServices();
-
-    // Listen for service selection from consultation modal or other components
     const handleSelectService = (event: CustomEvent) => {
       const serviceId = event.detail?.serviceId;
       if (serviceId) {
@@ -70,8 +50,26 @@ const BookingSection = () => {
     };
 
     // Listen for "Book Consultation" button clicks to open modal
-    const handleBookConsultation = () => {
+    const handleBookConsultation = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const preselectedServiceId = customEvent.detail?.preselectedServiceId;
       setShowConsultationModal(true);
+      // If a service was pre-selected, select it after modal opens
+      if (preselectedServiceId) {
+        setTimeout(() => {
+          const service = services.find((s) => s.id === preselectedServiceId);
+          if (service) {
+            setSelectedService(service);
+          }
+        }, 100);
+      }
+      // Scroll to booking section so modal is visible
+      setTimeout(() => {
+        const bookingSection = document.getElementById("booking");
+        if (bookingSection) {
+          bookingSection.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
     };
 
     window.addEventListener("selectService", handleSelectService as EventListener);
@@ -80,21 +78,37 @@ const BookingSection = () => {
       window.removeEventListener("selectService", handleSelectService as EventListener);
       window.removeEventListener("openConsultationModal", handleBookConsultation);
     };
-  }, [toast]);
+  }, [services]);
 
   // Handle consultation selection from modal
-  const handleConsultationContinue = (serviceId: string) => {
-    const service = services.find((s) => s.id === serviceId);
-    if (service) {
-      setSelectedService(service);
-      // Scroll to booking section
-      setTimeout(() => {
-        const bookingSection = document.getElementById("booking");
-        if (bookingSection) {
-          bookingSection.scrollIntoView({ behavior: "smooth" });
+  const handleConsultationContinue = async (serviceId: string) => {
+    // If services aren't loaded yet, load them first
+    if (services.length === 0) {
+      try {
+        const data = await apiClient.getServices();
+        setServices(data);
+        const service = data.find((s) => s.id === serviceId);
+        if (service) {
+          setSelectedService(service);
         }
-      }, 100);
+      } catch (error) {
+        // Error is already handled in modal
+        return;
+      }
+    } else {
+      const service = services.find((s) => s.id === serviceId);
+      if (service) {
+        setSelectedService(service);
+      }
     }
+    setShowConsultationModal(false);
+    // Scroll to booking section after modal closes
+    setTimeout(() => {
+      const bookingSection = document.getElementById("booking");
+      if (bookingSection) {
+        bookingSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 300); // Wait for modal close animation
   };
 
   const loadAvailability = async () => {
@@ -220,6 +234,7 @@ const BookingSection = () => {
         open={showConsultationModal}
         onOpenChange={setShowConsultationModal}
         onContinue={handleConsultationContinue}
+        preselectedServiceId={selectedService?.id}
       />
 
       <div className="container mx-auto px-6">
@@ -355,32 +370,53 @@ const BookingSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <form onSubmit={handleSubmit} className="card-elegant p-8 space-y-6">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="font-display text-2xl text-foreground">Booking Details</h3>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowConsultationModal(true)}
-                  className="text-secondary hover:text-secondary/80 font-body text-xs uppercase tracking-wide"
-                >
-                  <ArrowLeft className="w-3 h-3 mr-1" />
-                  Change Consultation
-                </Button>
-              </div>
-
-              {/* Selected Consultation Summary */}
+            <form id="booking-form" onSubmit={handleSubmit} className="card-elegant p-8 space-y-6">
+              {/* Selected Consultation Display at Top */}
               {selectedService && (
-                <div className="p-4 bg-muted/50 rounded-lg border border-border">
-                  <p className="font-body text-sm text-foreground/70 mb-1">
-                    <strong>Selected Consultation:</strong>
+                <div className="p-5 bg-secondary/10 rounded-lg border-2 border-secondary/20 mb-6">
+                  <div className="flex items-start justify-between mb-3">
+                    <label className="block font-body text-xs text-foreground/70 uppercase tracking-wide">
+                      Selected Consultation: {selectedService.title}
+                    </label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setShowConsultationModal(true);
+                        // Scroll to top of form when changing consultation
+                        const form = document.getElementById("booking-form");
+                        if (form) {
+                          form.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }
+                      }}
+                      className="text-secondary hover:text-secondary/80 font-body text-xs uppercase tracking-wide h-auto py-1"
+                    >
+                      <Edit className="w-3 h-3 mr-1" />
+                      Change Consultation
+                    </Button>
+                  </div>
+                  <p className="font-display text-base text-foreground font-medium mb-2">
+                    {selectedService.title} ({selectedService.duration} mins)
                   </p>
-                  <p className="font-body text-base text-foreground font-medium">
-                    {selectedService.title}
-                  </p>
+                  {selectedService.description && (
+                    <p className="font-body text-sm text-foreground/60 mt-2">
+                      {selectedService.description}
+                    </p>
+                  )}
+                  {selectedService.price && (
+                    <div className="flex items-center gap-2 mt-3 text-xs font-body">
+                      <span className="text-secondary font-medium">
+                        ₹{selectedService.price.toLocaleString("en-IN")}
+                      </span>
+                    </div>
+                  )}
                 </div>
               )}
+
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="font-display text-2xl text-foreground">Booking Details</h3>
+              </div>
 
               <div>
                 <label className="block font-body text-sm text-foreground/70 mb-2 uppercase tracking-wide">

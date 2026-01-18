@@ -20,6 +20,24 @@ PORT=3000
 NODE_ENV=development
 FRONTEND_URL=http://localhost:5173
 
+# Email Configuration (Choose one option)
+
+# Option 1: SMTP Server
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+SMTP_FROM_EMAIL=noreply@planetnakshatra.com
+SMTP_FROM_NAME=Planet Nakshatra
+
+# Option 2: Gmail Direct (simpler)
+GMAIL_USER=your-email@gmail.com
+GMAIL_PASSWORD=your-app-password
+
+# Admin Email (required for booking notifications)
+ADMIN_EMAIL=admin@planetnakshatra.com
+
 # Google Calendar API (Optional)
 GOOGLE_CLIENT_ID=your_client_id
 GOOGLE_CLIENT_SECRET=your_client_secret
@@ -137,6 +155,8 @@ All endpoints have:
 3. Start with: `npm run start:prod`
 4. Use PM2 or similar for process management
 5. Configure reverse proxy (nginx) for HTTPS
+
+See `DEPLOYMENT.md` for detailed deployment instructions.
 
 ## 🔍 Health Check
 

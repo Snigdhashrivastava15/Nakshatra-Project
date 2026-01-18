@@ -15,8 +15,14 @@ export class ServicesService {
         orderBy: { createdAt: 'asc' },
       });
       return services || [];
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error('Error in findAll:', error);
+      // If database connection fails, return empty array instead of throwing
+      // This allows the API to respond gracefully
+      if (error.code === 'P1001' || error.code === 'P1000') {
+        this.logger.warn('Database connection issue - returning empty services array');
+        return [];
+      }
       throw error;
     }
   }

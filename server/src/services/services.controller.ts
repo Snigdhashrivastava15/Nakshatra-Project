@@ -14,9 +14,15 @@ export class ServicesController {
       this.logger.log('Fetching all services');
       const services = await this.servicesService.findAll();
       this.logger.log(`Successfully fetched ${services.length} services`);
-      return services;
-    } catch (error) {
+      // Return empty array if no services (database might not be configured yet)
+      return services || [];
+    } catch (error: any) {
       this.logger.error('Error fetching services:', error);
+      // If database connection issue, return empty array instead of error
+      if (error.code === 'P1001' || error.code === 'P1000' || error.message?.includes('DATABASE_URL')) {
+        this.logger.warn('Database not configured - returning empty services array');
+        return [];
+      }
       throw new HttpException(
         'Failed to fetch services',
         HttpStatus.INTERNAL_SERVER_ERROR,
